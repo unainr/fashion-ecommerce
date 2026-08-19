@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { requireUser } from "../middleware/auth";
 
 import { zValidator } from "@hono/zod-validator";
-import { z } from "zod";
+import { eq, sql } from "drizzle-orm";
 import { createDb } from "../db";
 import { products } from "../db/schema";
 import {
@@ -11,7 +11,6 @@ import {
 	productUpdateSchema,
 } from "../schema/products-schema";
 import { generateSlug } from "../utils/utils";
-import { eq, sql } from "drizzle-orm";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
 	.use("*", requireUser)

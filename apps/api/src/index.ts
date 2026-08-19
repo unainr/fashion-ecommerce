@@ -2,6 +2,7 @@ import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { clerkMiddleware } from "@clerk/hono"
 import products from "./routes/products"
+import uploadimage from "./routes/uploadimage"
 
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
@@ -19,6 +20,6 @@ const app = new Hono<{ Bindings: CloudflareBindings }>()
     })(c, next)
   )
 
-const routes = app.route("/products", products)
+const routes = app.route("/products", products).route("/upload",uploadimage)
 export type AppType = typeof routes
 export default app
