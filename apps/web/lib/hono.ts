@@ -1,11 +1,16 @@
-import { hc } from "hono/client"
-import type { AppType } from "@workspace/api"
-import { auth } from "@clerk/nextjs/server"
+"use client"
 
-export const client = hc<AppType>(process.env.NEXT_PUBLIC_API_URL!, {
-  headers: async () => {
-    const { getToken } = await auth()
-    const token = await getToken()
-    return { Authorization: `Bearer ${token}` }
-  },
-})
+import { hc } from "hono/client"
+import { useAuth } from "@clerk/nextjs"
+import type { AppType } from "@workspace/api"
+
+export function useHonoClient() {
+  const { getToken } = useAuth()
+
+  return hc<AppType>(process.env.NEXT_PUBLIC_API_URL!, {
+    headers: async (): Promise<Record<string, string>> => {
+      const token = await getToken()
+      return token ? { Authorization: `Bearer ${token}` } : {}
+    },
+  })
+}
